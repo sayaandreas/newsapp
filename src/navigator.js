@@ -1,18 +1,21 @@
+import React from 'react';
 import {
   createAppContainer,
   createStackNavigator,
   createSwitchNavigator,
   createBottomTabNavigator,
 } from 'react-navigation';
-import routes from './routes';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
+import store from './store';
+import routes from './routes';
 import SplashScreen from './screens/SplashScreen';
 import HomeScreen from './screens/HomeScreen';
 import NewsDetailScreen from './screens/NewsDetailScreen';
 import ExploreScreen from './screens/ExploreScreen';
-// import ProfileLandingScreen from './screens/ProfileLandingScreen';
-// import RegisterScreen from './screens/RegisterScreen';
-// import LoginScreen from './screens/LoginScreen';
+import ProfileLandingScreen from './screens/ProfileLandingScreen';
+import RegisterScreen from './screens/RegisterScreen';
+import LoginScreen from './screens/LoginScreen';
 import ProfileScreen from './screens/ProfileScreen';
 
 const HomeTab = createStackNavigator({
@@ -33,67 +36,72 @@ const ExploreTab = createStackNavigator({
   },
 });
 
-// const AuthStack = createStackNavigator({
-//   [routes.ProfileLandingScreen]: {
-//     screen: ProfileLandingScreen,
-//   },
-//   [routes.RegisterScreen]: {
-//     screen: RegisterScreen,
-//   },
-//   [routes.LoginScreen]: {
-//     screen: LoginScreen,
-//   },
-// });
-
-const ProfileTab = createSwitchNavigator({
-  //   [routes.AuthStack]: {
-  //     screen: AuthStack,
-  //   },
-  [routes.ProfileScreen]: {
-    screen: ProfileScreen,
+const AuthStack = createStackNavigator({
+  [routes.ProfileLandingScreen]: {
+    screen: ProfileLandingScreen,
+  },
+  [routes.RegisterScreen]: {
+    screen: RegisterScreen,
+  },
+  [routes.LoginScreen]: {
+    screen: LoginScreen,
   },
 });
+
+const userId = store.getState().auth.userId;
+console.log(userId);
+const ProfileTab = createSwitchNavigator(
+  {
+    [routes.AuthStack]: {
+      screen: AuthStack,
+    },
+    [routes.ProfileScreen]: {
+      screen: ProfileScreen,
+    },
+  },
+  {
+    initialRouteName: userId ? routes.ProfileScreen : routes.AuthStack,
+  },
+);
 
 const MainStack = createBottomTabNavigator(
   {
     HomeTab: {
       navigationOptions: {
-        //     tabBarIcon: ({
-        //       tintColor,
-        //       focused,
-        //     }: {
-        //       tintColor: string,
-        //       focused: boolean,
-        //     }) => (
-        //       <Ionicons
-        //         name={focused ? 'ios-home' : 'ios-home'}
-        //         size={26}
-        //         style={{color: tintColor}}
-        //       />
-        //     ),
+        tabBarIcon: ({
+          tintColor,
+          focused,
+        }: {
+          tintColor: string,
+          focused: boolean,
+        }) => (
+          <MaterialIcons
+            name={focused ? 'home' : 'home'}
+            size={26}
+            style={{color: tintColor}}
+          />
+        ),
         tabBarLabel: 'Home',
       },
-      //   path: '/',
       screen: HomeTab,
     },
     ExploreTab: {
       screen: ExploreTab,
-      //   path: '/settings',
       navigationOptions: {
         tabBarLabel: 'Explore',
-        //     tabBarIcon: ({
-        //       tintColor,
-        //       focused,
-        //     }: {
-        //       tintColor: string,
-        //       focused: boolean,
-        //     }) => (
-        //       <Ionicons
-        //         name={focused ? 'ios-settings' : 'ios-settings'}
-        //         size={26}
-        //         style={{color: tintColor}}
-        //       />
-        //     ),
+        tabBarIcon: ({
+          tintColor,
+          focused,
+        }: {
+          tintColor: string,
+          focused: boolean,
+        }) => (
+          <MaterialIcons
+            name={focused ? 'explore' : 'explore'}
+            size={26}
+            style={{color: tintColor}}
+          />
+        ),
       },
     },
     ProfileTab: {
@@ -101,19 +109,19 @@ const MainStack = createBottomTabNavigator(
       //   path: '/settings',
       navigationOptions: {
         tabBarLabel: 'Profile',
-        //     tabBarIcon: ({
-        //       tintColor,
-        //       focused,
-        //     }: {
-        //       tintColor: string,
-        //       focused: boolean,
-        //     }) => (
-        //       <Ionicons
-        //         name={focused ? 'ios-settings' : 'ios-settings'}
-        //         size={26}
-        //         style={{color: tintColor}}
-        //       />
-        //     ),
+        tabBarIcon: ({
+          tintColor,
+          focused,
+        }: {
+          tintColor: string,
+          focused: boolean,
+        }) => (
+          <MaterialIcons
+            name={focused ? 'account-circle' : 'account-circle'}
+            size={26}
+            style={{color: tintColor}}
+          />
+        ),
       },
     },
   },
