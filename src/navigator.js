@@ -11,7 +11,11 @@ import store from './store';
 import routes from './routes';
 import SplashScreen from './screens/SplashScreen';
 import HomeScreen from './screens/HomeScreen';
-import NewsDetailScreen from './screens/NewsDetailScreen';
+
+//TODO mount multiple newsdetailscreen instances
+import HomeNewsDetailScreen from './screens/HomeNewsDetailScreen';
+import ExploreNewsDetailScreen from './screens/ExploreNewsDetailScreen';
+
 import ExploreScreen from './screens/ExploreScreen';
 import ProfileLandingScreen from './screens/ProfileLandingScreen';
 import RegisterScreen from './screens/RegisterScreen';
@@ -22,8 +26,8 @@ const HomeTab = createStackNavigator({
   [routes.HomeScreen]: {
     screen: HomeScreen,
   },
-  [routes.NewsDetailScreen]: {
-    screen: NewsDetailScreen,
+  [routes.HomeNewsDetailScreen]: {
+    screen: HomeNewsDetailScreen,
   },
 });
 
@@ -31,22 +35,27 @@ const ExploreTab = createStackNavigator({
   [routes.ExploreScreen]: {
     screen: ExploreScreen,
   },
-  [routes.NewsDetailScreen]: {
-    screen: NewsDetailScreen,
+  [routes.ExploreNewsDetailScreen]: {
+    screen: ExploreNewsDetailScreen,
   },
 });
 
-const AuthStack = createStackNavigator({
-  [routes.ProfileLandingScreen]: {
-    screen: ProfileLandingScreen,
+const AuthStack = createStackNavigator(
+  {
+    [routes.ProfileLandingScreen]: {
+      screen: ProfileLandingScreen,
+    },
+    [routes.RegisterScreen]: {
+      screen: RegisterScreen,
+    },
+    [routes.LoginScreen]: {
+      screen: LoginScreen,
+    },
   },
-  [routes.RegisterScreen]: {
-    screen: RegisterScreen,
+  {
+    headerMode: 'none',
   },
-  [routes.LoginScreen]: {
-    screen: LoginScreen,
-  },
-});
+);
 
 const userId = store.getState().auth.userId;
 console.log(userId);
@@ -68,13 +77,7 @@ const MainStack = createBottomTabNavigator(
   {
     HomeTab: {
       navigationOptions: {
-        tabBarIcon: ({
-          tintColor,
-          focused,
-        }: {
-          tintColor: string,
-          focused: boolean,
-        }) => (
+        tabBarIcon: ({tintColor, focused}) => (
           <MaterialIcons
             name={focused ? 'home' : 'home'}
             size={26}
@@ -89,13 +92,7 @@ const MainStack = createBottomTabNavigator(
       screen: ExploreTab,
       navigationOptions: {
         tabBarLabel: 'Explore',
-        tabBarIcon: ({
-          tintColor,
-          focused,
-        }: {
-          tintColor: string,
-          focused: boolean,
-        }) => (
+        tabBarIcon: ({tintColor, focused}) => (
           <MaterialIcons
             name={focused ? 'explore' : 'explore'}
             size={26}
@@ -109,13 +106,7 @@ const MainStack = createBottomTabNavigator(
       //   path: '/settings',
       navigationOptions: {
         tabBarLabel: 'Profile',
-        tabBarIcon: ({
-          tintColor,
-          focused,
-        }: {
-          tintColor: string,
-          focused: boolean,
-        }) => (
+        tabBarIcon: ({tintColor, focused}) => (
           <MaterialIcons
             name={focused ? 'account-circle' : 'account-circle'}
             size={26}

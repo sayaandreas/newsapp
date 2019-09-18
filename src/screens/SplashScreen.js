@@ -8,7 +8,7 @@ export default class SplashScreen extends React.Component {
 
   // Fetch the token from storage then navigate to our appropriate place
   _bootstrapAsync = async () => {
-    setTimeout(() => this.props.navigation.navigate('MainStack'), 2000);
+    setTimeout(() => this.props.navigation.navigate('MainStack'), 700);
   };
 
   // Render any loading content that you like here

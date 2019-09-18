@@ -24,7 +24,7 @@ export default (state = INITIAL_STATE, action) => {
         errorMessage: action.payload,
       };
 
-    case Auth.REGISTER_USER_SUCCESS:
+    case Auth.REGISTER_USER_BEGIN:
       return {
         ...state,
         loginIsLoading: true,

@@ -1,19 +1,10 @@
-import {Auth} from './types';
-import {validateUsername, validatePassword} from '../utils/validators';
-import {
-  stSaveUser,
-  stRemoveUser,
-  stRemoveCurrentMovies,
-} from '../utils/storage';
+import { Auth } from './types';
 import {
   requestToCreateNewGuestUser,
   requestToCreateNewAuthenticatedUser,
 } from '../api/auth';
-import {getTmdbErrorMessage} from '../api/codes';
-import RouteNames from '../RouteNames';
-import Config from '../Config';
 
-export const clearLoginFields = () => ({type: Auth.CLEAR_LOGIN_FIELDS});
+export const clearLoginFields = () => ({ type: Auth.CLEAR_LOGIN_FIELDS });
 export const loadUserIntoRedux = user => ({
   type: Auth.USER_LOADED,
   payload: user,
@@ -31,26 +22,26 @@ export const logOutUser = navigation => dispatch => {
   stRemoveUser();
   stRemoveCurrentMovies();
   navigation.navigate(RouteNames.AuthStack);
-  dispatch({type: Auth.LOG_OUT});
+  dispatch({ type: Auth.LOG_OUT });
 };
 
 export const createGuestSession = ({
   showToast,
   onSuccess,
 }) => async dispatch => {
-  dispatch({type: Auth.CREATE_GUEST_SESSION_ATTEMPT});
+  dispatch({ type: Auth.CREATE_GUEST_SESSION_ATTEMPT });
 
   try {
-    const {sessionId} = await requestToCreateNewGuestUser();
+    const { sessionId } = await requestToCreateNewGuestUser();
 
     dispatch({
       type: Auth.CREATE_GUEST_SESSION_SUCCESS,
-      payload: createUser({sessionId}),
+      payload: createUser({ sessionId }),
     });
     onSuccess();
   } catch (error) {
     showToast && showToast('Something went wrong. Please try again later.');
-    dispatch({type: Auth.CREATE_GUEST_SESSION_FAIL});
+    dispatch({ type: Auth.CREATE_GUEST_SESSION_FAIL });
   }
 };
 
@@ -77,17 +68,17 @@ export const loginUser = ({
     return;
   }
 
-  dispatch({type: Auth.LOGIN_USER_ATTEMPT});
+  dispatch({ type: Auth.LOGIN_USER_ATTEMPT });
 
   try {
-    const {accountId, sessionId} = await requestToCreateNewAuthenticatedUser({
+    const { accountId, sessionId } = await requestToCreateNewAuthenticatedUser({
       username,
       password,
     });
 
     dispatch({
       type: Auth.LOGIN_USER_SUCCESS,
-      payload: createUser({accountId, username, sessionId}),
+      payload: createUser({ accountId, username, sessionId }),
     });
     onSuccess();
   } catch (error) {
@@ -98,14 +89,14 @@ export const loginUser = ({
     const errMessage = isUnauthorized
       ? getTmdbErrorMessage(error.response.data.status_code)
       : '';
-    dispatch({type: Auth.LOGIN_USER_FAIL, payload: errMessage});
+    dispatch({ type: Auth.LOGIN_USER_FAIL, payload: errMessage });
   }
 };
 
 // Local functions
-const createUser = ({accountId, sessionId, username}) => {
+const createUser = ({ accountId, sessionId, username }) => {
   const isGuest = !accountId;
-  const user = {isGuest, sessionId, accountId, username};
+  const user = { isGuest, sessionId, accountId, username };
   Config.logGeneral && console.log('Creating user: ', user);
   stSaveUser(user);
   return user;

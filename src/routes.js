@@ -2,9 +2,10 @@ export default {
   SplashScreen: 'SplashScreen',
 
   HomeScreen: 'HomeScreen',
-  NewsDetailScreen: 'NewsDetailScreen',
+  HomeNewsDetailScreen: 'HomeNewsDetailScreen',
 
   ExploreScreen: 'ExploreScreen',
+  ExploreNewsDetailScreen: 'ExploreNewsDetailScreen',
 
   ProfileLandingScreen: 'ProfileLandingScreen',
   RegisterScreen: 'RegisterScreen',
